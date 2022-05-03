@@ -11,6 +11,9 @@ using WalletService.DTO;
 using WalletService.Database.Models;
 using WalletService.Models;
 using System.Diagnostics;
+using System.Runtime;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace WalletService.BackgroundServices
 {
@@ -56,28 +59,64 @@ namespace WalletService.BackgroundServices
         private void CheckMessages(object state)
         {
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (sender, evnt) =>
+            consumer.Received += async (sender, evnt) =>
             {
                 var body = evnt.Body.ToArray();
-                Debug.WriteLine(body);
                 try
                 {
-                    var cryptoData = JsonConvert.DeserializeObject<walletItems>(Encoding.UTF8.GetString(body));
+                    var cryptoData = Encoding.UTF8.GetString(body);
 
-                    TransactionRecords transaction = new TransactionRecords
+                    string[] messageSplit = cryptoData.Split('.');
+                    string movement = messageSplit[0];
+                    string symbol = messageSplit[1];
+                    string currency = "";
+                    double totQty =0;
+                    double priceChange = 0.1;
+
+                    if (symbol == "BTC")
                     {
-                        Symbol = cryptoData.Symbol,
-                        Qty = (decimal)cryptoData.Qty
-                    };
+                        currency = ".XBT";
+                    } 
+                    else if (symbol == "ETH")
+                    {
+                        currency = ".ETHBON";
+                    }
+                    else if (symbol == "CAR")
+                    {
+                        currency = ".BTHETAT";
+                    }
 
                     using var scope = _scopeFactory.CreateScope();
                     var dbContext = scope.ServiceProvider.GetService<WalletDbContext>();
 
-                    dbContext.Add(transaction);
+                    List<TransactionRecords> cryptoList = await dbContext.Transactions.ToListAsync();
+                    foreach (TransactionRecords rec in cryptoList)
+                    {
+                        if (rec.Symbol == currency)
+                        {
+                            totQty = (double)rec.Qty;
+                        }
+                    }
+                    Debug.WriteLine(totQty);
+
+                    if (movement == "DOWN")
+                    {
+                        priceChange = priceChange * -1;
+                    }
+
+                    TransactionRecords transactionRec = new TransactionRecords
+                    {
+                        Symbol = currency,
+                        Transaction_Type = movement,
+                        Qty = (decimal)(totQty * priceChange)
+                    };
+
+                    dbContext.Add(transactionRec);
                     dbContext.SaveChanges();
+
                 } catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    Debug.WriteLine(ex.ToString());
                 }
                 
             };
