@@ -28,12 +28,8 @@ namespace WalletService.Controllers
         public async Task<IActionResult> List()
         {
             List<TransactionRecords> transList = await _dbContext.Transactions.ToListAsync();
-            foreach(TransactionRecords trans in transList)
-            {
-                Debug.WriteLine("Transaction ID: {0} Transaction Type : {1} Symbol: {2} Quantity: {3}",
-                    trans.Id, trans.Symbol, trans.Transaction_Type, trans.Qty);
-            }
-            return Ok(transList);
+
+            return View(transList);
         }
 
         [HttpPost]

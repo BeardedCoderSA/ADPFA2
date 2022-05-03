@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "wallet/deposit",
+      "launchUrl": "wallet/list",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "wallet": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "wallet/deposit",
+      "launchUrl": "wallet/list",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

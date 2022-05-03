@@ -21,6 +21,7 @@ namespace WalletService
             services.AddControllers();
             services.AddDbContext<WalletDbContext>();
             services.AddHostedService <message_service>();
+            services.AddMvcCore().AddRazorViewEngine();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
