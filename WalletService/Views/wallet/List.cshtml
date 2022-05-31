@@ -3,8 +3,11 @@
 @{
     ViewData["Title"] = "List";
 }
-
-<h1>Wallet</h1>
+@{
+    decimal totBTC = 0;
+    decimal totETH = 0;
+    decimal totCar = 0;
+}
 <style>
     table.minimalistBlack {
   border: 3px solid #000000;
@@ -42,8 +45,9 @@ table.minimalistBlack tfoot td {
   font-size: 14px;
 }
 </style>
-<h2>Bitcoin Wallet</h2>
-<table class="minimalistBlack" cellpadding="3" cellspacing="10">
+<h1>WALLET</h1>
+<h1>Bitcoin</h1>
+<table class="minimalistBlack">
     <thead>
         <tr>
             <th>
@@ -55,12 +59,13 @@ table.minimalistBlack tfoot td {
             <th>
                 @Html.DisplayNameFor(model => model.Qty)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        @if(item.Symbol == ".XBT")
+            {
+                <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Symbol)
             </td>
@@ -70,8 +75,91 @@ table.minimalistBlack tfoot td {
             <td>
                 @Html.DisplayFor(modelItem => item.Qty)
             </td>
-        </tr>
+                </tr>
+                totBTC += item.Qty;
+            }
 }
     </tbody>
+    <td></td>
+    <td>Total</td>
+    <td>@totBTC</td>
+
 </table>
-<h6>Zandre Bester 8346 ADP631FA2</h6>
+<br /><br />
+<h1>Ethereum</h1>
+<table class="minimalistBlack">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Symbol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction_Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qty)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        @if(item.Symbol == ".BETH")
+            {
+                <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Symbol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Transaction_Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Qty)
+            </td>
+                </tr>
+                totETH += item.Qty;
+            }
+}
+    </tbody>
+    <td></td>
+    <td>Total</td>
+    <td>@totETH</td>
+    </table>
+    <br /><br />
+    <h1>Cardano</h1>
+<table class="minimalistBlack">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Symbol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Transaction_Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Qty)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        @if(item.Symbol == ".BADAT")
+            {
+                <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Symbol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Transaction_Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Qty)
+            </td>
+                </tr>
+                totCar += item.Qty;
+            }
+}
+    </tbody>
+    <td></td>
+    <td>Total</td>
+    <td>@totCar</td>
+</table>

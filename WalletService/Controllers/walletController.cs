@@ -35,7 +35,7 @@ namespace WalletService.Controllers
         [HttpPost]
         public async Task<IActionResult> Deposit([FromBody] walletItems items)
         {
-            if (items.Symbol == ".XBT" || items.Symbol == ".ETHBON" || items.Symbol == ".BTHETAT")
+            if (items.Symbol == ".XBT" || items.Symbol == ".BETH" || items.Symbol == ".BADAT")
             {
                 TransactionRecords transactionRec = new TransactionRecords
                 {
@@ -52,14 +52,14 @@ namespace WalletService.Controllers
                 return Ok("Deposit Succesfull!");
             } else
             {
-                return Ok("You can only deposit .XBT/.ETHBON/.BTHETAT");
+                return Ok("You can only deposit .XBT/.BETH/.BADAT");
             }
         }
 
         [HttpPost]
         public async Task<IActionResult> Withdraw([FromBody] walletItems items)
         {
-            if (items.Symbol == ".XBT" || items.Symbol == ".ETHBON" || items.Symbol == ".BHETAT")
+            if (items.Symbol == ".XBT" || items.Symbol == ".BETH" || items.Symbol == ".BADAT")
             {
                 decimal Quantity = 0;
                 List<TransactionRecords> transactionRecords = await _dbContext.Transactions.ToListAsync();
@@ -92,7 +92,7 @@ namespace WalletService.Controllers
                 }
             } else
             {
-                return Ok("You can only withdraw Bitcoin(.XBT), Ethereum(.ETHBON) and Cardano(.BTHETAT)");
+                return Ok("You can only withdraw Bitcoin(.XBT), Ethereum(.BETH) and Cardano(.BADAT)");
             }
         }
     }

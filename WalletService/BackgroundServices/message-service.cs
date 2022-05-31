@@ -71,7 +71,9 @@ namespace WalletService.BackgroundServices
                     string symbol = messageSplit[1];
                     string currency = "";
                     double totQty =0;
+                    double curQty = 0;
                     double priceChange = 0.1;
+                    double total = 0;
 
                     if (symbol == "BTC")
                     {
@@ -79,11 +81,11 @@ namespace WalletService.BackgroundServices
                     } 
                     else if (symbol == "ETH")
                     {
-                        currency = ".ETHBON";
+                        currency = ".BETH";
                     }
                     else if (symbol == "CAR")
                     {
-                        currency = ".BTHETAT";
+                        currency = ".BADAT";
                     }
 
                     using var scope = _scopeFactory.CreateScope();
@@ -94,14 +96,20 @@ namespace WalletService.BackgroundServices
                     {
                         if (rec.Symbol == currency)
                         {
-                            totQty = (double)rec.Qty;
+                            curQty = (double)rec.Qty;
+                            totQty = (double)(totQty + curQty);
+                            
                         }
                     }
                     Debug.WriteLine(totQty);
 
                     if (movement == "DOWN")
                     {
-                        priceChange = priceChange * -1;
+                        priceChange = -0.1;
+                    } 
+                    else if (movement == "UP")
+                    {
+                        priceChange = 0.1;
                     }
 
                     TransactionRecords transactionRec = new TransactionRecords
